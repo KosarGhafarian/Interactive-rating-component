@@ -1,9 +1,24 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
+
+import useRate from "./context/RateContext";
 
 import StartIcon from "./images/icon-star.svg";
 import "./stylesheet/style.css";
 
+const rates = [1, 2, 3, 4, 5];
+
 const App = () => {
+  const navigate = useNavigate();
+  const { selectedRate, setSelectedRate } = useRate();
+
+  const onClickRate = (rate) => {
+    setSelectedRate(rate);
+  };
+
+  const handleSubmit = () => {
+    navigate("/submit");
+  };
+
   return (
     <div className="container">
       <div className="star-container">
@@ -17,43 +32,22 @@ const App = () => {
         </p>
       </div>
       <div className="numbers">
-        <button>1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>4</button>
-        <button>5</button>
+        {rates.map((rate, index) => (
+          <button
+            key={index}
+            onClick={() => {
+              onClickRate(rate);
+            }}
+            type="button"
+            className={selectedRate === rate ? "selected" : ""}
+          >
+            {rate}
+          </button>
+        ))}
       </div>
-      <button type="submit">SUBMIT</button>
-      {/* .attribution { font-size: 11px; text-align: center; }
-     .attribution a { color: hsl(228, 45%, 44%); } */}
-
-      {/* <body>
-
-<!-- Rating state start -->
-
-
-
-Submit
-
-<!-- Rating state end -->
-
-<!-- Thank you state start -->
-
-You selected <!-- Add rating here --> out of 5
-
-Thank you!
-
-We appreciate you taking the time to give a rating. If you ever need more support, 
-don’t hesitate to get in touch!
-
-<!-- Thank you state end -->
-
-
-<div class="attribution">
-  Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
-  Coded by <a href="#">Your Name Here</a>.
-</div>
-</body> */}
+      <button type="submit" disabled={!selectedRate} onClick={handleSubmit}>
+        SUBMIT
+      </button>
     </div>
   );
 };
